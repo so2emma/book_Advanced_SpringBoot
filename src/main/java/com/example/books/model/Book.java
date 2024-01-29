@@ -1,18 +1,15 @@
 package com.example.books.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Year;
 
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
 @Entity
 @Table(name = "books")
 public class Book {
@@ -25,8 +22,6 @@ public class Book {
     private String genre;
     private String isbn;
     private Year publicationYear;
-
-
 
 
 
