@@ -22,7 +22,4 @@ public class Book {
     private String genre;
     private String isbn;
     private Year publicationYear;
-
-
-
 }
