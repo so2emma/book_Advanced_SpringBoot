@@ -6,43 +6,43 @@ import com.example.books.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BookServiceImpl implements BookService {
+@Service
+public class BookServiceImpl implements BookService{
     @Autowired
-    private BookRepositories bookRepositories;
+    public BookRepositories bookRepositories;
 
     @Override
     public ResponseEntity<List<Book>> getAllBooks() {
         try{
             return new ResponseEntity<>(bookRepositories.findAll(), HttpStatus.OK);
         }catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
-    @Override
-    public ResponseEntity<List<Book>> searchBooks(String query) {
-        try{
-            return new ResponseEntity<>(bookRepositories.findBookByProperty(query), HttpStatus.OK);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
-
-    }
+    // @Override
+    // public ResponseEntity<List<Book>> searchBooks(String query) {
+    //     try{
+    //         return new ResponseEntity<>(bookRepositories.searchByProperty(query), HttpStatus.OK);
+    //     }catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    //     return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+    // }
 
     @Override
     public ResponseEntity<Optional<Book>> getBookById(Long id) {
         try{
             return new ResponseEntity<>(bookRepositories.findById(id), HttpStatus.OK);
         }catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
         try{
             return new ResponseEntity<>(bookRepositories.save(book), HttpStatus.CREATED);
         }catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -64,18 +64,24 @@ public class BookServiceImpl implements BookService {
         if (optionalBook.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         Book book = optionalBook.get();
         book.setTitle(updatedBook.getTitle());
         book.setAuthor(updatedBook.getAuthor());
-        // Add other fields as needed...
+        book.setGenre(updatedBook.getGenre());
+        book.setIsbn(updatedBook.getIsbn());
+        book.setPublicationYear(updatedBook.getPublicationYear());
 
         return new ResponseEntity<>(bookRepositories.save(book), HttpStatus.OK);
     }
 
 
     @Override
-    public ResponseEntity<String> deleteBook(Long id) {
-        return null;
+    public ResponseEntity<Void> deleteBook(Long id) {
+        Optional<Book> optionalBook = bookRepositories.findById(id);
+        if (optionalBook.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        bookRepositories.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
