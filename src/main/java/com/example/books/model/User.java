@@ -13,4 +13,8 @@ public class User {
     private String name;
     private String phone;
     private String email;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    private Cart cart;
 }

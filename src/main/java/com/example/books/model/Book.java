@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Year;
+import java.util.Set;
 
 
 @Data
@@ -22,4 +23,7 @@ public class Book {
     private String genre;
     private String isbn;
     private Year publicationYear;
+
+    @ManyToMany(mappedBy = "books")
+    private Set<Cart> carts;
 }
