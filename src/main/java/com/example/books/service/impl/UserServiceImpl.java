@@ -1,8 +1,11 @@
 package com.example.books.service.impl;
 
+import com.example.books.model.Cart;
 import com.example.books.model.User;
+import com.example.books.repositories.CartRepositories;
 import com.example.books.repositories.UserRepositories;
 import com.example.books.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserRepositories userRepositories;
+
+    @Autowired
+    public CartRepositories cartRepositories;
+
     @Override
     public ResponseEntity<List<User>> getAllUsers() {
         try{
@@ -48,8 +55,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<User> addUser(User user) {
         try{
+            Cart cart = new Cart();
+            user.setCart(cart);
+            cart.setUser(user);
             return new ResponseEntity<>(userRepositories.save(user), HttpStatus.CREATED);
         }catch (Exception e) {
             e.printStackTrace(System.out);
