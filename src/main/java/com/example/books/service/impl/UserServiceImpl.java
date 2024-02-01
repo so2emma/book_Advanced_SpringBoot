@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         }catch(Exception e) {
             e.printStackTrace(System.out);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -55,18 +55,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<User> addUser(User user) {
         try{
             Cart cart = new Cart();
-            user.setCart(cart);
-            cart.setUser(user);
-            return new ResponseEntity<>(userRepositories.save(user), HttpStatus.CREATED);
-        }catch (Exception e) {
+//            user.setCart(cart);
+            User newUser = userRepositories.save(user); // Save the user first
+            cart.setUser(newUser);
+            cartRepositories.save(cart);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } catch (Exception e) {
             e.printStackTrace(System.out);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
 
     @Override
     public ResponseEntity<User> updateUser(Long id, User updatedUser) {

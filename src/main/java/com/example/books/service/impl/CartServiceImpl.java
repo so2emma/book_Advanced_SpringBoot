@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
     public BookRepositories bookRepositories;
 
     @Override
-    @Transactional
+//    @Transactional
     public ResponseEntity<Cart> addBookToCart(Long cartId, Book book) {
         try{
             Optional<Cart> optionalCart  =  cartRepositories.findById(cartId);

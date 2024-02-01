@@ -16,12 +16,12 @@ public class CartController {
     @Autowired
     public CartServiceImpl cartService;
 
-    @PostMapping("/addBook/{id}")
+    @PostMapping("/add-book/{id}")
     public ResponseEntity<Cart> addBookToCart(@PathVariable Long id, @RequestBody Book book){
         return cartService.addBookToCart(id, book);
     }
 
-    @PostMapping("/removeBook/{id}")
+    @PostMapping("/remove-book/{id}")
     public ResponseEntity<Cart> removeBookFromCart(@PathVariable Long id, @RequestBody Book book) {
         return cartService.removeBookFromCart(id, book);
     }
