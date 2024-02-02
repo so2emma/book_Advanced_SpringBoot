@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         try{
             Cart cart = new Cart();
 //            user.setCart(cart);
-            User newUser = userRepositories.save(user); // Save the user first
+            User newUser = userRepositories.save(user);
             cart.setUser(newUser);
             cartRepositories.save(cart);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);

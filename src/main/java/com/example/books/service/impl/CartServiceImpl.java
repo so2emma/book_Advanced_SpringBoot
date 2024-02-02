@@ -7,11 +7,13 @@ import com.example.books.repositories.CartRepositories;
 import com.example.books.service.CartService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,33 +27,48 @@ public class CartServiceImpl implements CartService {
     public BookRepositories bookRepositories;
 
     @Override
-//    @Transactional
-    public ResponseEntity<Cart> addBookToCart(Long cartId, Book book) {
+    public ResponseEntity<Cart> addBookToCart(Long cartId, Long bookId) {
         try{
-            Optional<Cart> optionalCart  =  cartRepositories.findById(cartId);
-            if(optionalCart.isPresent()){
-                Cart cart = optionalCart.get();
-                cart.getBooks().add(book);
-                return new ResponseEntity<>(cart, HttpStatus.CREATED);
+            Optional<Cart> optionalCart = cartRepositories.findById(cartId);
+            if (optionalCart.isPresent()) {
+                Optional<Book> optionalBook = bookRepositories.findById(bookId);
+                if(optionalBook.isPresent()) {
+                    Cart cart = optionalCart.get();
+                    Book book = optionalBook.get();
+
+                    cart.getBooks().add(book);
+                    cartRepositories.save(cart);
+                    return new ResponseEntity<>(cart, HttpStatus.OK);
+                }
+
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
             }
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         } catch(Exception e) {
             e.printStackTrace(System.out);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Cart> removeBookFromCart(Long cartId, Book book) {
+    public ResponseEntity<Cart> removeBookFromCart(Long cartId, Long bookId) {
         try{
             Optional<Cart> optionalCart  =  cartRepositories.findById(cartId);
-            if(optionalCart.isPresent()){
+            Optional<Book> optionalBook   = bookRepositories.findById(bookId);
+
+            if(optionalCart.isPresent() && optionalBook.isPresent()){
                 Cart cart = optionalCart.get();
-                Set<Book> books  = cart.getBooks();
+                List<Book> books  = cart.getBooks();
+
+                Book book = optionalBook.get();
 
                 if(books.contains(book))
                 {
                     cart.getBooks().remove(book);
+                    cartRepositories.save(cart);
                     return new ResponseEntity<>(cart, HttpStatus.OK);
                 }
                 else {
@@ -64,10 +81,12 @@ public class CartServiceImpl implements CartService {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+
     @Override
     public ResponseEntity<Optional<Cart>> getCart(Long cartId) {
         try {
-            return new ResponseEntity<>(cartRepositories.findById(cartId), HttpStatus.OK);
+            Optional<Cart> newCart = cartRepositories.findById(cartId);
+            return new ResponseEntity<>(newCart, HttpStatus.OK);
         } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

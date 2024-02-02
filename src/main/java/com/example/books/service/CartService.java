@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public interface CartService {
 
-    ResponseEntity<Cart> addBookToCart (Long cartId, Book book);
+    ResponseEntity<Cart> addBookToCart (Long cartId, Long bookId);
 
-    ResponseEntity<Cart> removeBookFromCart (Long cartId, Book book);
+    ResponseEntity<Cart> removeBookFromCart (Long cartId, Long bookId);
 
     ResponseEntity<Optional<Cart>> getCart (Long cartId);
 }
