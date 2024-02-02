@@ -3,6 +3,7 @@ package com.example.books.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -29,7 +30,7 @@ public class Cart {
             joinColumns = {@JoinColumn(name = "cart_id")},
             inverseJoinColumns = {@JoinColumn(name = "book_id")}
     )
-    private Set<Book> books;
+    private List<Book> books;
 
 
 }

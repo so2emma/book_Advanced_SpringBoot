@@ -24,6 +24,4 @@ public class Book {
     private String isbn;
     private Year publicationYear;
 
-    @ManyToMany(mappedBy = "books")
-    private Set<Cart> carts;
 }
