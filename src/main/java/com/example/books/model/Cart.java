@@ -32,5 +32,8 @@ public class Cart {
     )
     private List<Book> books;
 
+    private Double total;
+
+
 
 }

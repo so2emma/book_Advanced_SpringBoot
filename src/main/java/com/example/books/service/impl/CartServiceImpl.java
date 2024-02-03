@@ -26,6 +26,9 @@ public class CartServiceImpl implements CartService {
     @Autowired
     public BookRepositories bookRepositories;
 
+    @Autowired
+    public CheckoutServiceImpl checkoutService;
+
     @Override
     public ResponseEntity<Cart> addBookToCart(Long cartId, Long bookId) {
         try{
@@ -37,7 +40,9 @@ public class CartServiceImpl implements CartService {
                     Book book = optionalBook.get();
 
                     cart.getBooks().add(book);
+                    cart.setTotal(checkoutService.calculatePrice(cart));
                     cartRepositories.save(cart);
+
                     return new ResponseEntity<>(cart, HttpStatus.OK);
                 }
 
@@ -68,6 +73,7 @@ public class CartServiceImpl implements CartService {
                 if(books.contains(book))
                 {
                     cart.getBooks().remove(book);
+                    cart.setTotal(checkoutService.calculatePrice(cart));
                     cartRepositories.save(cart);
                     return new ResponseEntity<>(cart, HttpStatus.OK);
                 }
