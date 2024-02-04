@@ -3,6 +3,9 @@ package com.example.books.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "users")
@@ -14,6 +17,7 @@ public class User {
     private String phone;
     private String email;
 
-//    @OneToOne(mappedBy = "user", optional = true)
-//    private Cart cart;
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "purchase_history_id", referencedColumnName = "id")
+    private List<PurchaseHistory> purchaseHistories = new ArrayList<>();
 }
