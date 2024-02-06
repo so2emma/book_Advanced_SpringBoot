@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface BookService {
 
     ResponseEntity<List<Book>> getAllBooks();
-    // ResponseEntity<List<Book>> searchBooks(String query);
     ResponseEntity<Optional<Book>> getBookById(Long id);
     ResponseEntity<Book> addBook(Book book);
     ResponseEntity<Book> updateBook(Long id, Book book);

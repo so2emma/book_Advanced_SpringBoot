@@ -19,7 +19,5 @@ public class PurchaseHistory {
 
     private Double total;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+
 }

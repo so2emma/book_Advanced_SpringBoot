@@ -16,9 +16,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "cart_id", referencedColumnName = "id")
-//    private User user;
+
 
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

@@ -8,9 +8,6 @@ import java.util.Set;
 
 
 @Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Builder
 @Entity
 @Table(name = "books")
 public class Book {
